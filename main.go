@@ -27,8 +27,8 @@ import (
 )
 
 const (
-	Heavy string = "|"
-	Light string = ":"
+	HEAVY string = "|"
+	LIGHT string = ":"
 )
 
 type Drop struct {
@@ -37,6 +37,9 @@ type Drop struct {
 }
 
 func main() {
+	// Print escape code to hide cursor
+	tm.Printf("\033[?25l")
+
 	// Set seed for rand
 	rand.Seed(time.Now().UnixNano())
 
@@ -46,52 +49,38 @@ func main() {
 
 	// Create array of drops
 	var drops []Drop
-	var dropTypes = []string{Heavy, Light}
+	var dropTypes = []string{HEAVY, LIGHT}
 
-	// For the height of the terminal
-	// create a random drop
-	for i := 0; i < height; i++ {
-		for _, dropType := range dropTypes {
-			ints := GenerateMultipleRandomNumbers(3, 0, width)
-
-			for _, j := range ints {
-				drops = append(drops, Drop{dropType, GetSpeed(dropType), j, i})
-			}
-		}
-	}
-
-	for _, drop := range drops {
-		tm.MoveCursor(drop.x, drop.y)
-		tm.Printf(string(drop.char) + "\033[?25l")
-	}
-
-	// Infinite loop
-	for {
+	for { // Infinite loop
+		// Clear screen on each loop
 		tm.Clear()
 
 		// For each drop
 		for idx := range drops {
-			// Get reference to drop and change location
+			// Get reference to drop and fall
 			drop := &drops[idx]
-			drop.y += drop.speed
+			FallDrop(drop)
 
+			// If drop falls off screen, remove it from drops array
 			if drop.y > height {
 				RemoveDrop(drops, idx)
 			}
 
-			// Move cursor to location and print to screen
-			tm.MoveCursor(drop.x, drop.y+drop.speed)
+			// Move cursor to location and print character to screen
+			tm.MoveCursor(drop.x, drop.y)
 			tm.Printf(string(drop.char))
 		}
 
+		// Generate new drops at the end of each loop
 		for _, dropType := range dropTypes {
-			ints := GenerateMultipleRandomNumbers(3, 0, width)
+			ints := GenerateMultipleRandomNumbers(2, 0, width)
 
 			for _, j := range ints {
 				drops = AddDrop(Drop{dropType, GetSpeed(dropType), j, 0}, drops)
 			}
 		}
 
+		// Flush required
 		tm.Flush()
 
 		// Sleep for 50ms
@@ -99,26 +88,37 @@ func main() {
 	}
 }
 
-func GetSpeed(dropType string) int {
-	switch dropType {
-	case Heavy:
-		return 1
-	case Light:
-		return 3
-	}
-	return 1
+func FallDrop(d *Drop) {
+	d.y += d.speed
 }
 
+// Add a pre-specified drop to the provided drops array
 func AddDrop(d Drop, ds []Drop) []Drop {
 	ds = append(ds, d)
 	return ds
 }
 
+// Remove a drop from the drop array by index
 func RemoveDrop(s []Drop, i int) []Drop {
 	s[i] = s[len(s)-1]
 	return s[:len(s)-1]
 }
 
+// Get the speed of the drop based on the drop type
+// Heavy drops fall by 1 cell per loop
+// Light drops fall by 3 cells per loop
+func GetSpeed(dropType string) int {
+	switch dropType {
+	case HEAVY:
+		return 1
+	case LIGHT:
+		return 3
+	default:
+		return 1
+	}
+}
+
+// Generate c random numbers of range min to max
 func GenerateMultipleRandomNumbers(c, min, max int) []int {
 	nums := make([]int, c)
 
