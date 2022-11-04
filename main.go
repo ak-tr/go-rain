@@ -62,7 +62,7 @@ func main() {
 
 	for _, drop := range drops {
 		tm.MoveCursor(drop.x, drop.y)
-		tm.Printf(string(drop.char))
+		tm.Printf(string(drop.char) + "\033[?25l")
 	}
 
 	// Infinite loop
@@ -85,8 +85,11 @@ func main() {
 		}
 
 		for _, dropType := range dropTypes {
-			ints := GenerateMultipleRandomNumbers(1, 0, width)
-			drops = AddDrop(Drop{dropType, GetSpeed(dropType), ints[0], 1}, drops)
+			ints := GenerateMultipleRandomNumbers(3, 0, width)
+
+			for _, j := range ints {
+				drops = AddDrop(Drop{dropType, GetSpeed(dropType), j, 0}, drops)
+			}
 		}
 
 		tm.Flush()
