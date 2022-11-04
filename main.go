@@ -55,6 +55,23 @@ func main() {
 		// Clear screen on each loop
 		tm.Clear()
 
+		// Capture resize
+		if height != tm.Height() || width != tm.Width() {
+			// Update height and width to new height
+			height = tm.Height()
+			width = tm.Width()
+
+			// Loop through all drops...
+			for idx := range drops {
+				drop := drops[idx]
+
+				// ...and remove if off screen
+				if drop.x >= width || drop.y >= height {
+					RemoveDrop(drops, idx)
+				}
+			}
+		}
+
 		// For each drop
 		for idx := range drops {
 			// Get reference to drop and fall
