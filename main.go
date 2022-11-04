@@ -64,6 +64,7 @@ func main() {
 			// If drop falls off screen, remove it from drops array
 			if drop.y > height {
 				RemoveDrop(drops, idx)
+				continue
 			}
 
 			// Move cursor to location and print character to screen
