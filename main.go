@@ -21,6 +21,9 @@ package main
 
 import (
 	"math/rand"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	tm "github.com/buger/goterm"
@@ -104,6 +107,19 @@ func main() {
 		// Sleep for 50ms
 		time.Sleep(time.Millisecond * 50)
 	}
+}
+
+func init() {
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		tm.Clear()             // Clear screen
+		tm.MoveCursor(1, 1)    // Reset cursor
+		tm.Printf("\033[?25h") // Show cursor
+		tm.Flush()             // Mandatory flush
+		os.Exit(0)             // Exit
+	}()
 }
 
 func fallDrop(d *Drop) {
