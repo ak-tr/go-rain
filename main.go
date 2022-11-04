@@ -67,7 +67,7 @@ func main() {
 
 				// ...and remove if off screen
 				if drop.x >= width || drop.y >= height {
-					RemoveDrop(drops, idx)
+					removeDrop(drops, idx)
 				}
 			}
 		}
@@ -76,11 +76,11 @@ func main() {
 		for idx := range drops {
 			// Get reference to drop and fall
 			drop := &drops[idx]
-			FallDrop(drop)
+			fallDrop(drop)
 
 			// If drop falls off screen, remove it from drops array
 			if drop.y > height {
-				RemoveDrop(drops, idx)
+				removeDrop(drops, idx)
 				continue
 			}
 
@@ -91,10 +91,10 @@ func main() {
 
 		// Generate new drops at the end of each loop
 		for _, dropType := range dropTypes {
-			ints := GenerateMultipleRandomNumbers(2, 0, width)
+			ints := generateMultipleRandomNumbers(2, 0, width)
 
 			for _, j := range ints {
-				drops = AddDrop(Drop{dropType, GetSpeed(dropType), j, 0}, drops)
+				drops = addDrop(Drop{dropType, getSpeed(dropType), j, 0}, drops)
 			}
 		}
 
@@ -106,18 +106,18 @@ func main() {
 	}
 }
 
-func FallDrop(d *Drop) {
+func fallDrop(d *Drop) {
 	d.y += d.speed
 }
 
 // Add a pre-specified drop to the provided drops array
-func AddDrop(d Drop, ds []Drop) []Drop {
+func addDrop(d Drop, ds []Drop) []Drop {
 	ds = append(ds, d)
 	return ds
 }
 
 // Remove a drop from the drop array by index
-func RemoveDrop(s []Drop, i int) []Drop {
+func removeDrop(s []Drop, i int) []Drop {
 	s[i] = s[len(s)-1]
 	return s[:len(s)-1]
 }
@@ -125,7 +125,7 @@ func RemoveDrop(s []Drop, i int) []Drop {
 // Get the speed of the drop based on the drop type
 // Heavy drops fall by 1 cell per loop
 // Light drops fall by 3 cells per loop
-func GetSpeed(dropType string) int {
+func getSpeed(dropType string) int {
 	switch dropType {
 	case HEAVY:
 		return 1
@@ -137,7 +137,7 @@ func GetSpeed(dropType string) int {
 }
 
 // Generate c random numbers of range min to max
-func GenerateMultipleRandomNumbers(c, min, max int) []int {
+func generateMultipleRandomNumbers(c, min, max int) []int {
 	nums := make([]int, c)
 
 	for i := 0; i < c; i++ {
