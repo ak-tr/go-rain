@@ -41,6 +41,17 @@ type Drop struct {
 }
 
 func main() {
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		tm.Clear()             // Clear screen
+		tm.MoveCursor(1, 1)    // Reset cursor
+		tm.Printf("\033[?25h") // Show cursor
+		tm.Flush()             // Mandatory flush
+		os.Exit(0)             // Exit
+	}()
+
 	// Print escape code to hide cursor
 	tm.Printf("\033[?25l")
 
@@ -84,7 +95,7 @@ func main() {
 
 			// If drop falls off screen, remove it from drops array
 			if drop.y > height {
-				removeDrop(drops, idx)
+				drops = removeDrop(drops, idx)
 				continue
 			}
 
@@ -112,19 +123,6 @@ func main() {
 		// Sleep for 50ms
 		time.Sleep(time.Millisecond * 50)
 	}
-}
-
-func init() {
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		tm.Clear()             // Clear screen
-		tm.MoveCursor(1, 1)    // Reset cursor
-		tm.Printf("\033[?25h") // Show cursor
-		tm.Flush()             // Mandatory flush
-		os.Exit(0)             // Exit
-	}()
 }
 
 func fallDrop(d *Drop) {
