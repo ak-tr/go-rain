@@ -54,15 +54,15 @@ func (ds Drops) add(d Drop) Drops {
 }
 
 func main() {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		tm.Clear()             // Clear screen
-		tm.MoveCursor(1, 1)    // Reset cursor
-		tm.Printf("\033[?25h") // Show cursor
-		tm.Flush()             // Mandatory flush
-		os.Exit(0)             // Exit
+		tm.Clear()                                    // Clear screen
+		tm.MoveCursor(1, 1)                           // Reset cursor
+		tm.Print("\033[?25hhttps://github.com/ak-tr") // Show cursor
+		tm.Flush()                                    // Mandatory flush
+		os.Exit(0)                                    // Exit
 	}()
 
 	// Print escape code to hide cursor
