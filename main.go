@@ -35,9 +35,21 @@ const (
 	LIGHT string = ":"
 )
 
+// Types
 type Drop struct {
 	char        string
 	speed, x, y int
+}
+
+func (d *Drop) fall() {
+	d.y += d.speed
+}
+
+type Drops []Drop
+
+func (ds Drops) add(d Drop) Drops {
+	ds = append(ds, d)
+	return ds
 }
 
 func main() {
@@ -63,7 +75,7 @@ func main() {
 	width := tm.Width()
 
 	// Create array of drops
-	var drops []Drop
+	var drops Drops
 	var dropTypes = []string{HEAVY, LIGHT}
 
 	for { // Infinite loop
@@ -99,7 +111,7 @@ func main() {
 		for idx := range drops {
 			// Get reference to drop and fall
 			drop := &drops[idx]
-			fallDrop(drop)
+			drop.fall()
 
 			// If y value of drop is more than height, skip loop
 			if drop.y > height {
@@ -124,7 +136,7 @@ func main() {
 		for _, dropType := range dropTypes {
 			for i := 0; i < getDropsPerLine(width); i++ {
 				j := generateRandomNumber(0, width)
-				drops = addDrop(Drop{dropType, getSpeed(dropType), j, 0}, drops)
+				drops = drops.add(Drop{dropType, getSpeed(dropType), j, 0})
 			}
 		}
 
@@ -136,15 +148,11 @@ func main() {
 	}
 }
 
-func fallDrop(d *Drop) {
-	d.y += d.speed
-}
-
 // Add a pre-specified drop to the provided drops array
-func addDrop(d Drop, ds []Drop) []Drop {
-	ds = append(ds, d)
-	return ds
-}
+// func addDrop(d Drop, ds []Drop) []Drop {
+// 	ds = append(ds, d)
+// 	return ds
+// }
 
 // Get the speed of the drop based on the drop type
 // Heavy drops fall by 1 cell per loop
