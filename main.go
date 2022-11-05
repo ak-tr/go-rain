@@ -122,9 +122,8 @@ func main() {
 
 		// Generate new drops at the end of each loop
 		for _, dropType := range dropTypes {
-			ints := generateMultipleRandomNumbers(getDropsPerLine(width), 0, width)
-
-			for _, j := range ints {
+			for i := 0; i < getDropsPerLine(width); i++ {
+				j := generateRandomNumber(0, width)
 				drops = addDrop(Drop{dropType, getSpeed(dropType), j, 0}, drops)
 			}
 		}
@@ -169,12 +168,6 @@ func getDropsPerLine(w int) int {
 }
 
 // Generate c random numbers of range min to max
-func generateMultipleRandomNumbers(c, min, max int) []int {
-	nums := make([]int, c)
-
-	for i := 0; i < c; i++ {
-		nums[i] = rand.Intn(max-min+1) + min
-	}
-
-	return nums
+func generateRandomNumber(min, max int) int {
+	return rand.Intn(max-min+1) + min
 }
