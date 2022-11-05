@@ -1,6 +1,6 @@
 ## go-rain
 
-![GIF showcasing project](https://i.imgur.com/H3N7Tii.gif)
+![GIF showcasing project](https://i.imgur.com/zbruavY.gif)
 
 This is a very basic implementation of a terminal rain effect in Go using the [goterm library](https://github.com/buger/goterm).
 
