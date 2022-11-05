@@ -20,6 +20,7 @@
 package main
 
 import (
+	"math"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -168,11 +169,9 @@ func getSpeed(dropType string) int {
 	}
 }
 
+// Get width of screen, divide by 100 and then round up
 func getDropsPerLine(w int) int {
-	if w > 150 {
-		return 2
-	}
-	return 1
+	return int(math.Ceil(float64(w) / 100))
 }
 
 // Generate c random numbers of range min to max
