@@ -27,6 +27,7 @@ import (
 	"time"
 
 	tm "github.com/buger/goterm"
+	"github.com/jwalton/gchalk"
 )
 
 const (
@@ -89,12 +90,16 @@ func main() {
 
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
-			tm.Printf(string(drop.char))
+			if drop.char == LIGHT {
+				tm.Print(gchalk.BrightBlack(drop.char))
+				continue
+			}
+			tm.Print(drop.char)
 		}
 
 		// Generate new drops at the end of each loop
 		for _, dropType := range dropTypes {
-			ints := generateMultipleRandomNumbers(2, 0, width)
+			ints := generateMultipleRandomNumbers(getDropsPerLine(width), 0, width)
 
 			for _, j := range ints {
 				drops = addDrop(Drop{dropType, getSpeed(dropType), j, 0}, drops)
@@ -150,6 +155,13 @@ func getSpeed(dropType string) int {
 	default:
 		return 1
 	}
+}
+
+func getDropsPerLine(w int) int {
+	if w > 150 {
+		return 2
+	}
+	return 1
 }
 
 // Generate c random numbers of range min to max
