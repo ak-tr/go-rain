@@ -32,8 +32,9 @@ import (
 )
 
 const (
-	HEAVY string = "|"
-	LIGHT string = ":"
+	HEAVY  string = "|"
+	MEDIUM string = ":"
+	LIGHT  string = "."
 )
 
 // Types
@@ -77,7 +78,7 @@ func main() {
 
 	// Create array of drops
 	var drops Drops
-	var dropTypes = []string{HEAVY, LIGHT}
+	var dropTypes = []string{HEAVY, MEDIUM, LIGHT}
 
 	for { // Infinite loop
 		// Clear screen on each loop
@@ -124,7 +125,7 @@ func main() {
 
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
-			if drop.char == LIGHT {
+			if drop.char != HEAVY {
 				tm.Print(gchalk.BrightBlack(drop.char))
 				continue
 			}
@@ -149,12 +150,6 @@ func main() {
 	}
 }
 
-// Add a pre-specified drop to the provided drops array
-// func addDrop(d Drop, ds []Drop) []Drop {
-// 	ds = append(ds, d)
-// 	return ds
-// }
-
 // Get the speed of the drop based on the drop type
 // Heavy drops fall by 1 cell per loop
 // Light drops fall by 3 cells per loop
@@ -162,6 +157,8 @@ func getSpeed(dropType string) int {
 	switch dropType {
 	case HEAVY:
 		return 1
+	case MEDIUM:
+		return 2
 	case LIGHT:
 		return 3
 	default:
