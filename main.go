@@ -70,6 +70,9 @@ func main() {
 		// Clear screen on each loop
 		tm.Clear()
 
+		// Reset temp value on each loop
+		tmp := drops[:0]
+
 		// Capture resize
 		if height != tm.Height() || width != tm.Width() {
 			// Update height and width to new height
@@ -80,11 +83,16 @@ func main() {
 			for idx := range drops {
 				drop := drops[idx]
 
-				// ...and remove if off screen
+				// ...and ignore if off screen
 				if drop.x >= width || drop.y >= height {
-					removeDrop(drops, idx)
+					continue
 				}
+
+				// Add to tmp slice
+				tmp = append(tmp, Drop{drop.char, drop.speed, drop.x, drop.y})
 			}
+
+			drops = tmp
 		}
 
 		// For each drop
@@ -93,11 +101,13 @@ func main() {
 			drop := &drops[idx]
 			fallDrop(drop)
 
-			// If drop falls off screen, remove it from drops array
+			// If y value of drop is more than height, skip loop
 			if drop.y > height {
-				drops = removeDrop(drops, idx)
 				continue
 			}
+
+			// Append to tmp array only if previous gaurd clause is false
+			tmp = append(tmp, Drop{drop.char, drop.speed, drop.x, drop.y})
 
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
@@ -107,6 +117,8 @@ func main() {
 			}
 			tm.Print(drop.char)
 		}
+
+		drops = tmp
 
 		// Generate new drops at the end of each loop
 		for _, dropType := range dropTypes {
@@ -133,12 +145,6 @@ func fallDrop(d *Drop) {
 func addDrop(d Drop, ds []Drop) []Drop {
 	ds = append(ds, d)
 	return ds
-}
-
-// Remove a drop from the drop array by index
-func removeDrop(s []Drop, i int) []Drop {
-	s[i] = s[len(s)-1]
-	return s[:len(s)-1]
 }
 
 // Get the speed of the drop based on the drop type
