@@ -58,6 +58,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
+		time.Sleep(time.Millisecond * 250)
 		tm.Clear()                                    // Clear screen
 		tm.MoveCursor(1, 1)                           // Reset cursor
 		tm.Print("\033[?25hhttps://github.com/ak-tr") // Show cursor
@@ -144,8 +145,8 @@ func main() {
 		// Flush required
 		tm.Flush()
 
-		// Sleep for 50ms
-		time.Sleep(time.Millisecond * 50)
+		// 30 frames per second...
+		time.Sleep(time.Second / 30)
 	}
 }
 
