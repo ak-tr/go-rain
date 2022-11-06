@@ -59,11 +59,12 @@ func main() {
 	go func() {
 		<-c
 		time.Sleep(time.Millisecond * 250)
-		tm.Clear()                                    // Clear screen
-		tm.MoveCursor(1, 1)                           // Reset cursor
-		tm.Print("\033[?25hhttps://github.com/ak-tr") // Show cursor
-		tm.Flush()                                    // Mandatory flush
-		os.Exit(0)                                    // Exit
+		tm.Clear()                                      // Clear screen
+		tm.Print("\033[0m")                             // Reset attributes
+		tm.MoveCursor(1, 1)                             // Reset cursor
+		tm.Println("\033[?25hhttps://github.com/ak-tr") // Show cursor
+		tm.Flush()                                      // Mandatory flush
+		os.Exit(0)                                      // Exit
 	}()
 
 	// Print escape code to hide cursor
