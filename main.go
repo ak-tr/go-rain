@@ -28,7 +28,6 @@ import (
 	"time"
 
 	tm "github.com/buger/goterm"
-	"github.com/jwalton/gchalk"
 )
 
 const (
@@ -126,10 +125,10 @@ func main() {
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
 			if drop.char != HEAVY {
-				tm.Print(gchalk.BrightBlack(drop.char))
+				tm.Printf("\033[37m%s", drop.char)
 				continue
 			}
-			tm.Print(drop.char)
+			tm.Printf("\033[97m%s", drop.char)
 		}
 
 		drops = tmp
@@ -156,19 +155,24 @@ func main() {
 func getSpeed(dropType string) int {
 	switch dropType {
 	case HEAVY:
-		return 1
+		return generateRandomNumber(1, 2)
 	case MEDIUM:
-		return 2
+		return generateRandomNumber(2, 3)
 	case LIGHT:
-		return 3
+		return generateRandomNumber(3, 4)
 	default:
 		return 1
 	}
 }
 
 // Get width of screen, divide by 100 and then round up
+// If value is more than 1, return random number between 1 and 2
+// otherwise return 1
 func getDropsPerLine(w int) int {
-	return int(math.Ceil(float64(w) / 100))
+	if int(math.Ceil(float64(w)/100)) > 1 {
+		return generateRandomNumber(1, 2)
+	}
+	return 1
 }
 
 // Generate c random numbers of range min to max
