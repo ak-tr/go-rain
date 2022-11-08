@@ -1,7 +1,6 @@
 # go-rain
 
-![](https://user-images.githubusercontent.com/62529128/200142769-3650694b-3191-483c-94b7-3ff574e83562.gif)
-
+![Screen Recording 2022-11-08 at 03 06 08](https://user-images.githubusercontent.com/62529128/200467049-2b26a0ed-36cc-4f78-b8e8-8d22ee614035.gif)
 
 This is a very basic implementation of a terminal rain effect in Go using the [goterm library](https://github.com/buger/goterm).
 
