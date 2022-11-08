@@ -28,6 +28,7 @@ import (
 	"time"
 
 	tm "github.com/buger/goterm"
+	"github.com/fatih/color"
 )
 
 const (
@@ -59,11 +60,12 @@ func main() {
 	go func() {
 		<-c
 		time.Sleep(time.Millisecond * 250)
-		tm.Clear()                                                      // Clear screen
-		tm.MoveCursor(1, 1)                                             // Set cursor pos
-		tm.Println("\033[?25h\x1b[0;4mhttps://github.com/ak-tr\x1b[0m") // Show cursor
-		tm.Flush()                                                      // Mandatory flush
-		os.Exit(0)                                                      // Exit
+		tm.Clear()                             // Clear screen
+		tm.MoveCursor(1, 1)                    // Set cursor pos
+		tm.Print("\033[?25h")                  // Show cursor
+		tm.Println("https://github.com/ak-tr") // Output URL
+		tm.Flush()                             // Mandatory flush
+		os.Exit(0)                             // Exit
 	}()
 
 	// Print escape code to hide cursor
@@ -126,10 +128,10 @@ func main() {
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
 			if drop.char != HEAVY {
-				tm.Printf("\x1b[90;1m%s", drop.char)
+				tm.Printf(color.HiBlackString(drop.char))
 				continue
 			}
-			tm.Printf("\x1b[37;1m%s", drop.char)
+			tm.Printf(color.HiWhiteString(drop.char))
 		}
 
 		drops = tmp
@@ -146,7 +148,7 @@ func main() {
 		tm.Flush()
 
 		// 30 frames per second...
-		time.Sleep(time.Second / 30)
+		time.Sleep(time.Second / 24)
 	}
 }
 
