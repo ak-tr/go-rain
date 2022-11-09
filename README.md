@@ -8,7 +8,7 @@ Inspired by [nkleeman](https://github.com/nkleemann)'s [implemenatation](https:/
 
 ## Dependencies
 
-As mentioned above, this program relies on `goterm` and `gchalk` to print the rain drops to the terminal.  If you decide you want to run the program, it should auto install any dependencies when you perform `go run` command.
+As mentioned above, this program relies on `goterm` and `gookit/color` to print the rain drops to the terminal.  If you decide you want to run the program, it should auto install any dependencies when you perform `go run` command.
 
 ## Installation
 
@@ -34,8 +34,10 @@ Then, run:
 
 ## Issues
 
-~~Currently does not work with standard Windows CMD or Powershell - use some form of terminal emulator like Cmder.~~
+Windows support added. Should have no issues there.
 
-Windows support is unknown, works for some, doesn't work for others.
+MacOS users, if you encounter an `xcrun: error: invalid active developer path` error, run:
+
+`$ xcode-select --install`
 
 <sup><sub>Also my first time using Golang, I appreciate any feedback...</sub></sup>
