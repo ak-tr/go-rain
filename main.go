@@ -28,7 +28,7 @@ import (
 	"time"
 
 	tm "github.com/buger/goterm"
-	"github.com/fatih/color"
+	"github.com/gookit/color"
 )
 
 const (
@@ -128,10 +128,10 @@ func main() {
 			// Move cursor to location and print character to screen
 			tm.MoveCursor(drop.x, drop.y)
 			if drop.char != HEAVY {
-				tm.Printf(color.HiBlackString(drop.char))
+				tm.Printf(color.Gray.Render(drop.char))
 				continue
 			}
-			tm.Printf(color.HiWhiteString(drop.char))
+			tm.Printf(color.White.Render(drop.char))
 		}
 
 		drops = tmp
